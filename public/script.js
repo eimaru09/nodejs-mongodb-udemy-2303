@@ -1,6 +1,7 @@
 const tasksDOM = document.querySelector(".tasks");
 const formDOM = document.querySelector(".task-form");
 const formINPUT = document.querySelector(".task-input");
+const formALERT = document.querySelector(".form-alert");
 
 
 //データを１つずつ取り出してHTMLに出力してみよう  46
@@ -8,13 +9,25 @@ const showTasks = async function getUser() {
   try {
     const { data: tasks } = await axios.get('/api/v1/tasks');
 
+    //データ取得のエラーハンドリングをしてみよう  49
+    if (tasks.length < 1){
+      tasksDOM.innerHTML = `
+          <h5 "class="emplity-list">No records found.</h5>
+      `;
+      return;
+    }
+
     const allTasks = tasks.map((task) => {
       const { completed, _id, name } = task;
-      return `<div class="single-task">
-                <h5><span><i class="fas fa-check-circle"></i></span>${name}</h5>
+
+      return `<div class="single-task ${completed && "task-completed"}">
+                <h5>
+                  <span><i class="fas fa-check-circle"></i></span>${name}
+                </h5>
                 <div class="task-links">
                   <!-- Edit -->
-                  <a href="#" class="edit-link">
+                  <!-- 52. 特定のタスクの編集ページを指定して遷移させよう -->
+                  <a href="edit.html?id=${_id}" class="edit-link">
                     <i class="fas fa-edit"></i>
                   </a>
                   <!-- Delete -->
@@ -36,6 +49,7 @@ const showTasks = async function getUser() {
 showTasks();
 
 
+
 //axiosを使ってクライアントサイドからデータを作成してみよう  47
 formDOM.addEventListener('submit', async (event) => {
   event.preventDefault();
@@ -46,9 +60,21 @@ formDOM.addEventListener('submit', async (event) => {
     console.log(response.data);
     showTasks();
     formINPUT.value = "";
+    //50. データ作成のエラーハンドリングをしてみよう
+    formALERT.style.display = "block";
+    formALERT.textContent = "タスクが追加されました";
+    formALERT.classList.add("text-success");
   } catch (error){
     console.log(error);
+    //50. データ作成のエラーハンドリングをしてみよう
+    formALERT.style.display = "block";
+    formALERT.innerHTML = "20文字を超えています";
   }
+  //50. データ作成のエラーハンドリングをしてみよう
+  setTimeout(() =>{
+    formALERT.style.display = "none";
+  }, 3000);
+  
 });
 
 
@@ -69,3 +95,11 @@ tasksDOM.addEventListener('click', async (event) => {
   }
 });
 
+// //51. Todoタスク編集ページを作成しよう
+// tasksDOM.addEventListener('click', async (event) => {
+//   const element = event.target;
+//   console.log(element.parentElement);
+//   if(element.parentElement.classList.contains("edit-link")){
+//     location.href = "edit.html";
+//   }
+// });

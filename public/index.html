@@ -13,22 +13,23 @@
     referrerpolicy="no-referrer" />
 </head>
 <body>
-    <form class="task-form">
+    <div class="task-form">
         <h4>NodejsでToDoアプリ</h4>
-    <div class="form-control"></div>
-        <input 
-            type="text" 
-            name="name" 
-            class="task-input" 
-            placeholder="例:Node.jsの勉強"
-        />
-        <button type="submit" class="btn submit-btn">送信</button>
-    </form>
+        <form class="form-control">
+            <input 
+                type="text" 
+                name="name" 
+                class="task-input" 
+                placeholder="例:Node.jsの勉強"
+            />
+            <button type="submit" class="btn submit-btn">送信</button>
+        </form>
+        <div class="form-alert"></div>
+        </form>
 
 
     <section class="task-container">
-    <div class="tasks">
-     </div>
+        <div class="tasks"></div>
     </section>
     
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
